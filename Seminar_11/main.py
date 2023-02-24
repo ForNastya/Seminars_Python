@@ -5,11 +5,10 @@ import matplotlib.pyplot as plt
 a, b, c, d, e = -12, -18, 5, 10, -30
 limit = 10
 step = 0.01
-step_acr = 0.0000001
-line_style = '-'
+step_acr = 0.000001
+line_style = '--'
 color = 'b'
 direct_up = True
-
 
 def switch_line():
     global line_style
@@ -32,38 +31,36 @@ def func(x):
     return f
 
 x = np.arange(-limit, limit + step, step)
+
 x_change = [(-limit, 'limit')]
 
-for i in range(len(x) -1):
-    if func(x[i]) > 0 and func(x[i+1]) <0 or func(x[i]) < 0 and func(x[i+1]) > 0:
+for i in range(len(x) - 1):
+    if func(x[i]) > 0 and func(x[i+1]) < 0 or func(x[i]) < 0 and func(x[i+1]) > 0:
         x_acr = np.arange(x[i], x[i+1] + step_acr, step_acr)
-        for j in range(len(x_acr) -1):
-            if func(x_acr[j]) > 0 and func(x_acr[j+1]) < 0 or func(x_acr[j]) < 0 and func(x_acr[j+1]) > 0:
+        for j in range(len(x_acr) - 1):
+            if func(x_acr[j]) > 0 and func(x_acr[j + 1]) < 0 or func(x_acr[j]) < 0 and func(x_acr[j + 1]) > 0:
                 x_change.append((x_acr[j], 'zero'))
     if direct_up:
-    if func(x[i]) > func(x[i+1]):
-        direct_up = False
-        x_change.append((x[i], 'dir'))
+        if func(x[i]) > func(x[i+1]):
+            direct_up = False
+            x_change.append((x[i], 'dir'))
     else:
         if func(x[i]) < func(x[i+1]):
-            durect_up = True
+            direct_up = True
             x_change.append((x[i], 'dir'))
-
 
 x_change.append((limit, 'limit'))
 
-for i in range(len(x_change) -1):
-    cur_x = np.arange(x_change[1][0], x_change[i+1][0] + step, step)
+print(x_change)
+
+for i in range(len(x_change) - 1):
+    cur_x = np.arange(x_change[i][0], x_change[i + 1][0] + step, step)
     if x_change[i][1] == 'zero':
-        plt.plot(x_change[i][0], func(x_change[i][0], 'go'))
-        plt.rcParams['line, linestyle'] = switch_line()
+        plt.plot(x_change[i][0], func(x_change[i][0]), 'go')
+        plt.rcParams['lines.linestyle'] = switch_line()
         plt.plot(cur_x, func(cur_x), color)
     else:
         plt.plot(cur_x, func(cur_x), switch_color())
 
 plt.grid()
 plt.show()
-
-
-
-
